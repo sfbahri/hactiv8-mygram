@@ -67,7 +67,7 @@ func PhotoRoutes(r *gin.RouterGroup, db *sql.DB) {
 		controllers.PhotoUpdate(c, db, photo)
 	})
 
-	sf.DELETE("/delete/:id", func(c *gin.Context) {
+	sf.DELETE("/delete/:id/:user_id", func(c *gin.Context) {
 		controllers.PhotoDelete(c, db)
 	})
 }

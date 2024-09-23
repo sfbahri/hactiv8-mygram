@@ -123,11 +123,12 @@ func SocialMediaGetByID(c *gin.Context, db *sql.DB) {
 
 func SocialMediaDelete(c *gin.Context, db *sql.DB) {
 	id := c.Param("id")
+	usr_id := c.Param("user_id")
 
-	query := `SELECT id FROM socialmedia WHERE id = $1`
+	query := `SELECT id FROM socialmedia WHERE id = $1 and user_id = $2`
 	var socmedID uint
 
-	err := db.QueryRow(query, id).Scan(&socmedID)
+	err := db.QueryRow(query, id, usr_id).Scan(&socmedID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Social Media not found"})

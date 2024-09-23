@@ -125,12 +125,13 @@ func PhotoGetByID(c *gin.Context, db *sql.DB) {
 
 func PhotoDelete(c *gin.Context, db *sql.DB) {
 	id := c.Param("id")
+	usr_id := c.Param("user_id")
 
 	// First, check if the photo exists
-	query := `SELECT id FROM photo WHERE id = $1`
+	query := `SELECT id FROM photo WHERE id = $1 and user_id = $2`
 	var photoID uint
 
-	err := db.QueryRow(query, id).Scan(&photoID)
+	err := db.QueryRow(query, id, usr_id).Scan(&photoID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Photo not found"})

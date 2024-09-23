@@ -67,7 +67,7 @@ func SocialMediaRoutes(r *gin.RouterGroup, db *sql.DB) {
 		controllers.SocialMediaGetByID(c, db)
 	})
 
-	sf.DELETE("/delete/:id", func(c *gin.Context) {
+	sf.DELETE("/delete/:id/:user_id", func(c *gin.Context) {
 		controllers.SocialMediaDelete(c, db)
 	})
 }

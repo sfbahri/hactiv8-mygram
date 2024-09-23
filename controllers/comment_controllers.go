@@ -136,11 +136,12 @@ func CommentGetByID(c *gin.Context, db *sql.DB) {
 
 func CommentDelete(c *gin.Context, db *sql.DB) {
 	id := c.Param("id")
+	usr_id := c.Param("user_id")
 
-	query := `SELECT id FROM comment WHERE id = $1`
+	query := `SELECT id FROM comment WHERE id = $1 and user_id = $2`
 	var commentID uint
 
-	err := db.QueryRow(query, id).Scan(&commentID)
+	err := db.QueryRow(query, id, usr_id).Scan(&commentID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Comment not found"})

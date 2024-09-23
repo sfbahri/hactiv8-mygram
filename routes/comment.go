@@ -67,7 +67,7 @@ func CommentRoutes(r *gin.RouterGroup, db *sql.DB) {
 		controllers.CommentGetByID(c, db)
 	})
 
-	sf.DELETE("/delete/:id", func(c *gin.Context) {
+	sf.DELETE("/delete/:id/:user_id", func(c *gin.Context) {
 		controllers.CommentDelete(c, db)
 	})
 }
