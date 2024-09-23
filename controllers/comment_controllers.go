@@ -113,10 +113,10 @@ func CommentGetByID(c *gin.Context, db *sql.DB) {
 
 	id := c.Param("id")
 
-	query := `SELECT id, user_id, photo_id, message, created_at, updated_at FROM comment WHERE id = $1`
+	query := `SELECT id, user_id, photo_id, message, created_at FROM comment WHERE id = $1`
 	var comment models.Comment
 
-	err := db.QueryRow(query, id).Scan(&comment.ID, &comment.UserID, &comment.PhotoID, &comment.Message, &comment.CreatedAt, &comment.UpdatedAt)
+	err := db.QueryRow(query, id).Scan(&comment.ID, &comment.UserID, &comment.PhotoID, &comment.Message, &comment.CreatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Comment not found"})

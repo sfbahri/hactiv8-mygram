@@ -100,54 +100,54 @@ func SocialMediaGetByID(c *gin.Context, db *sql.DB) {
 
 	id := c.Param("id")
 
-	query := `SELECT id, user_id, photo_id, message, created_at, updated_at FROM comment WHERE id = $1`
-	var comment models.Comment
+	query := `SELECT id, name, social_media_url, user_id, created_at FROM socialmedia WHERE id = $1`
+	var socmed models.SocialMedia
+	err := db.QueryRow(query, id).Scan(&socmed.ID, &socmed.Name, &socmed.SocialMediaURL, &socmed.UserID, &socmed.CreatedAt)
 
-	err := db.QueryRow(query, id).Scan(&comment.ID, &comment.UserID, &comment.PhotoID, &comment.Message, &comment.CreatedAt, &comment.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Comment not found"})
+			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Social Media not found"})
 			return
 		}
 		log.Printf("Query error: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"status": 500, "info": "Failed to get comment"})
+		c.JSON(http.StatusInternalServerError, gin.H{"status": 500, "info": "Failed to get Social Media"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": 200,
 		"info":   "success",
-		"data":   comment,
+		"data":   socmed,
 	})
 }
 
-// func SocialMediaDelete(c *gin.Context, db *sql.DB) {
-// 	id := c.Param("id")
+func SocialMediaDelete(c *gin.Context, db *sql.DB) {
+	id := c.Param("id")
 
-// 	query := `SELECT id FROM comment WHERE id = $1`
-// 	var commentID uint
+	query := `SELECT id FROM socialmedia WHERE id = $1`
+	var socmedID uint
 
-// 	err := db.QueryRow(query, id).Scan(&commentID)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Comment not found"})
-// 			return
-// 		}
-// 		log.Printf("Query error: %v", err)
-// 		c.JSON(http.StatusInternalServerError, gin.H{"status": 500, "info": "Failed to get comment"})
-// 		return
-// 	}
+	err := db.QueryRow(query, id).Scan(&socmedID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"status": 404, "info": "Social Media not found"})
+			return
+		}
+		log.Printf("Query error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": 500, "info": "Failed to get socialmedia"})
+		return
+	}
 
-// 	deleteQuery := `DELETE FROM comment WHERE id = $1`
-// 	_, err = db.Exec(deleteQuery, id)
-// 	if err != nil {
-// 		log.Printf("Delete error: %v", err)
-// 		c.JSON(http.StatusInternalServerError, gin.H{"status": 500, "info": "Failed to delete comment"})
-// 		return
-// 	}
+	deleteQuery := `DELETE FROM socialmedia WHERE id = $1`
+	_, err = db.Exec(deleteQuery, id)
+	if err != nil {
+		log.Printf("Delete error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": 500, "info": "Failed to delete socialmedia"})
+		return
+	}
 
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"status": 200,
-// 		"info":   "Comment deleted successfully",
-// 	})
-// }
+	c.JSON(http.StatusOK, gin.H{
+		"status": 200,
+		"info":   "Social Media deleted successfully",
+	})
+}
